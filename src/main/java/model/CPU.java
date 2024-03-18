@@ -1,5 +1,7 @@
 package main.java.model;
 
+import java.util.Map;
+
 public class CPU {
     private RegisterFile registerFile;
     private ALU alu;
@@ -14,4 +16,15 @@ public class CPU {
     }
 
     // Methods for CPU operations...
+    public int[] getRegisters() {
+        return registerFile.getRegisters();
+    }
+
+    public int[] getMemory() {
+        return memory.getMemoryContents();
+    }
+
+    public Map<String, Integer> getStatistics() {
+        return controlUnit.getStatistics();
+    }
 }

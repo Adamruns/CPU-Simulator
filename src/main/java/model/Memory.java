@@ -14,4 +14,9 @@ public class Memory {
     public void writeMemory(int address, int value) {
         memory[address] = value;
     }
+
+    // get memory contents
+    public int[] getMemoryContents() {
+        return memory;
+    }
 }

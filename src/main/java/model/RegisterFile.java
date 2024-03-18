@@ -14,4 +14,9 @@ public class RegisterFile {
     public void writeRegister(int registerNumber, int value) {
         registers[registerNumber] = value;
     }
+
+    // get all registers
+    public int[] getRegisters() {
+        return registers;
+    }
 }
