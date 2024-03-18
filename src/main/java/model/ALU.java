@@ -1,5 +1,4 @@
-package model;
-
+package main.java.model;
 
 public class ALU {
     public int add(int operand1, int operand2) {

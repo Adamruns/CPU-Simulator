@@ -1,13 +1,14 @@
 package main.java.controller;
 
-import model.CPU;
+import main.java.model.CPU;
+import main.java.view.CPUTextView;
 
 
 public class CPUController {
     private CPU cpu;
-    private CPUView view;
+    private CPUTextView view;
 
-    public CPUController(CPU cpu, CPUView view) {
+    public CPUController(CPU cpu, CPUTextView view) {
         this.cpu = cpu;
         this.view = view;
     }
