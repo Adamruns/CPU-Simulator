@@ -19,4 +19,17 @@ public class Memory {
     public int[] getMemoryContents() {
         return memory;
     }
+
+    // read instruction at memory address (current pc)
+    public int readInstruction(int address) {
+        // Check if the address is within the bounds of the memory array
+        if (address >= 0 && address < memory.length) {
+            // Return the instruction stored at the specified address
+            return memory[address];
+        } 
+        else {
+            // address out of bounds 
+            throw new IllegalArgumentException("Invalid memory address: " + address);
+        }
+    }
 }

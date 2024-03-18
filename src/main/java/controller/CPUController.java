@@ -42,7 +42,6 @@ public class CPUController {
 
     // Method to update the view with CPU state
     private void updateView() {
-        // Get CPU state (e.g., register values, memory contents) from the model
         // Update the view with the current CPU state
         view.updateView(cpu.getRegisters(), cpu.getMemory(), cpu.getStatistics());
     }
