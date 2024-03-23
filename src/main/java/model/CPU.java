@@ -96,8 +96,8 @@ public class CPU {
         int rs = extractSourceRegister(instruction);
         int rt = extractTargetRegister(instruction);
         int rd = extractDestinationRegister(instruction);
-        int result = cpu.getRegister(rs) + cpu.getRegister(rt);
-        cpu.setRegister(rd, result);
+        int result = getRegister(rs) + getRegister(rt);
+        setRegister(rd, result);
         pc += 4; // Update PC for the next instruction
     }
     
@@ -105,9 +105,9 @@ public class CPU {
         int base = extractSourceRegister(instruction);
         int rt = extractTargetRegister(instruction);
         int offset = extractImmediate(instruction); 
-        int address = cpu.getRegister(base) + offset;
+        int address = getRegister(base) + offset;
         int data = memory.readData(address);
-        cpu.setRegister(rt, data);
+        setRegister(rt, data);
         pc += 4;
     }
     
@@ -115,8 +115,8 @@ public class CPU {
         int rs = extractSourceRegister(instruction);
         int rt = extractTargetRegister(instruction);
         int immediate = extractImmediate(instruction); 
-        int result = cpu.getRegister(rs) + immediate;
-        cpu.setRegister(rt, result);
+        int result = getRegister(rs) + immediate;
+        setRegister(rt, result);
         pc += 4;
     }
 
