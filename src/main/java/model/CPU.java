@@ -13,6 +13,11 @@ public class CPU {
 
     // opcodes and funct constants
     public static final int OPCODE_R_TYPE = 0x0;
+    public static final int OPCODE_ADDI = 0x8;
+    public static final int OPCODE_BEQ = 0x4;
+    public static final int OPCODE_J = 0x2;
+    public static final int OPCODE_LW = 0x23;
+    public static final int OPCODE_SW = 0x2B;
 
     public CPU(int numRegisters, int memorySize) {
         registerFile = new RegisterFile(numRegisters);
@@ -91,14 +96,14 @@ public class CPU {
         }
     }
 
-    // helpers for id stage, for each operation
+    // helpers for id stage, for each operation, NEED TO ADD THE OTHERS
     private void executeAdd(int instruction) {
         int rs = extractSourceRegister(instruction);
         int rt = extractTargetRegister(instruction);
         int rd = extractDestinationRegister(instruction);
         int result = getRegister(rs) + getRegister(rt);
         setRegister(rd, result);
-        pc += 4; // Update PC for the next instruction
+        pc += 4; 
     }
     
     private void executeLw(int instruction) {
@@ -106,7 +111,7 @@ public class CPU {
         int rt = extractTargetRegister(instruction);
         int offset = extractImmediate(instruction); 
         int address = getRegister(base) + offset;
-        int data = memory.readData(address);
+        int data = memory.readMemory(address);
         setRegister(rt, data);
         pc += 4;
     }
