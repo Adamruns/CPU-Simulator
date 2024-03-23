@@ -22,7 +22,7 @@ public class CPU {
         pc = 0;
     }
 
-    // methods for general use
+    // methods for display use
     public int[] getRegisters() {
         return registerFile.getRegisters();
     }
@@ -33,6 +33,16 @@ public class CPU {
 
     public Map<String, Integer> getStatistics() {
         return controlUnit.getStatistics();
+    }
+
+    // getter method for a specific register
+    public int getRegister(int index) {
+        return registerFile.readRegister(index);
+    }
+
+    // setter method for a specific register
+    public void setRegister(int index, int value) {
+        registerFile.writeRegister(index, value);
     }
 
     // if
