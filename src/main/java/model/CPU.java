@@ -32,29 +32,36 @@ public class CPU {
         return controlUnit.getStatistics();
     }
 
-    public int fetchNextInstruction() {
-        // NEED TO IMPLEMENT readInstruction within memory class
+    public int fetchInstruction() {
+        // Fetch the instruction at the current PC value
         int instruction = memory.readInstruction(pc);
+    
+        // Return the fetched instruction for decoding and execution
+        return instruction;
+    }
 
-        // Determine the type of instruction and calculate the size 
-        switch (extractOpcode(instruction)) {
-            case 0x04:
-                // BEQ instruction: PC += 4 + SignExt18b({imm, 00})
-                pc += 4 + (extractImmediate(instruction) << 2); 
+    public int decodeInstruction() {
+
+        // implement decode logic here, could include updating pc
+
+        return 0;
+    }
+
+    // potential helper for decode/execute
+    public void updatePCAfterInstruction(int instruction) {
+        int opcode = extractOpcode(instruction);
+    
+        switch (opcode) {
+            case 0x04: // BEQ
+                pc += 4 + (extractImmediate(instruction) << 2);
                 break;
-
-            case 0x02:
-                // J (jump) instruction: PC ← {(PC + 4)[31:28], address, 00}
+            case 0x02: // J (jump)
                 pc = ((pc + 4) & 0xF0000000) | (extractJumpAddress(instruction) << 2);
                 break;
-            
-            default:
-                // Default: PC += 4 
+            default: // For most instructions
                 pc += 4;
                 break;
         }
-
-        return instruction;
     }
 
     // Helper methods for extracting fields from instructions
