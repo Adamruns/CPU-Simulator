@@ -70,7 +70,14 @@ public class CPU {
     }
 
     private int extractImmediate(int instruction) {
-        return (instruction & 0xFFFF); 
+        int immediate = instruction & 0xFFFF;
+
+        // if negative
+        if ((immediate & 0x8000) > 0) {
+            immediate |= 0xFFFF0000;
+        }
+
+        return immediate;
     }
 
     private int extractJumpAddress(int instruction) {
