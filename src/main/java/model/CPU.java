@@ -11,6 +11,9 @@ public class CPU {
     private ControlUnit controlUnit;
     private int pc;
 
+    // opcodes and funct constants
+    public static final int OPCODE_R_TYPE = 0x0;
+
     public CPU(int numRegisters, int memorySize) {
         registerFile = new RegisterFile(numRegisters);
         alu = new ALU();
@@ -19,7 +22,7 @@ public class CPU {
         pc = 0;
     }
 
-    // Methods for CPU operations...
+    // methods for general use
     public int[] getRegisters() {
         return registerFile.getRegisters();
     }
@@ -32,6 +35,7 @@ public class CPU {
         return controlUnit.getStatistics();
     }
 
+    // if
     public int fetchInstruction() {
         // Fetch the instruction at the current PC value
         int instruction = memory.readInstruction(pc);
@@ -40,33 +44,87 @@ public class CPU {
         return instruction;
     }
 
-    public int decodeInstruction() {
-
-        // implement decode logic here, could include updating pc
-
-        return 0;
-    }
-
-    // potential helper for decode/execute
-    public void updatePCAfterInstruction(int instruction) {
+    // id
+    public void decodeInstruction(int instruction) {
         int opcode = extractOpcode(instruction);
     
-        switch (opcode) {
-            case 0x04: // BEQ
-                pc += 4 + (extractImmediate(instruction) << 2);
-                break;
-            case 0x02: // J (jump)
-                pc = ((pc + 4) & 0xF0000000) | (extractJumpAddress(instruction) << 2);
-                break;
-            default: // For most instructions
-                pc += 4;
-                break;
+        if (opcode == OPCODE_R_TYPE) {
+            int funct = extractFunctField(instruction);
+            switch (funct) {
+                case FUNCT_ADD:
+                    executeAdd(instruction);
+                    break;
+                case FUNCT_SUB:
+                    executeSub(instruction);
+                    break;
+                // Add cases for other R-type functions
+                default:
+                    // Handle undefined function code
+                    System.err.println("Undefined function code for R-type instruction: " + funct);
+                    break;
+            }
+        } else {
+            // Handle non-R-type instructions
+            switch (opcode) {
+                case OPCODE_BEQ:
+                    executeBEQ(instruction);
+                    break;
+                case OPCODE_J:
+                    executeJump(instruction);
+                    break;
+                // Add cases for other opcodes
+                default:
+                    // Handle undefined opcode
+                    System.err.println("Undefined opcode encountered: " + opcode);
+                    break;
+            }
         }
     }
 
-    // Helper methods for extracting fields from instructions
+    // helpers for id stage, for each operation
+    private void executeAdd(int instruction) {
+        int rs = extractSourceRegister(instruction);
+        int rt = extractTargetRegister(instruction);
+        int rd = extractDestinationRegister(instruction);
+        int result = cpu.getRegister(rs) + cpu.getRegister(rt);
+        cpu.setRegister(rd, result);
+        pc += 4; // Update PC for the next instruction
+    }
+    
+    private void executeLw(int instruction) {
+        int base = extractSourceRegister(instruction);
+        int rt = extractTargetRegister(instruction);
+        int offset = extractImmediate(instruction); 
+        int address = cpu.getRegister(base) + offset;
+        int data = memory.readData(address);
+        cpu.setRegister(rt, data);
+        pc += 4;
+    }
+    
+    private void executeAddi(int instruction) {
+        int rs = extractSourceRegister(instruction);
+        int rt = extractTargetRegister(instruction);
+        int immediate = extractImmediate(instruction); 
+        int result = cpu.getRegister(rs) + immediate;
+        cpu.setRegister(rt, result);
+        pc += 4;
+    }
+
+    // helper methods for extracting fields from instructions
     private int extractOpcode(int instruction) {
         return (instruction >> 26) & 0x3F; 
+    }
+
+    private int extractSourceRegister(int instruction) {
+        return (instruction >> 21) & 0x1F;
+    }
+    
+    private int extractTargetRegister(int instruction) {
+        return (instruction >> 16) & 0x1F;
+    }
+    
+    private int extractDestinationRegister(int instruction) {
+        return (instruction >> 11) & 0x1F;
     }
 
     private int extractImmediate(int instruction) {
@@ -82,5 +140,9 @@ public class CPU {
 
     private int extractJumpAddress(int instruction) {
         return (instruction & 0x03FFFFFF); 
+    }
+
+    private int extractFunctField(int instruction) {
+        return instruction & 0x3F; 
     }
 }

@@ -29,7 +29,8 @@ public class Memory {
         } 
         else {
             // address out of bounds 
-            throw new IllegalArgumentException("Invalid memory address: " + address);
+            System.err.println("Invalid memory address: " + address);
+            return -1;
         }
     }
 }
