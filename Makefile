@@ -1,16 +1,42 @@
-.PHONY: run test clean
+# Define a variable for the Java compiler
+JCC = javac
 
-# Command to run the program with the default input file.
-run:
-	python3 main.py input_file.bin
+# Define a variable for compilation flags
+# The -g flag compiles with debugging information
+JFLAGS = -g
 
-# Command to run the unit tests.
-test:
-	python3 -m unittest discover -s tests
+# Clear the default suffixes
+.SUFFIXES: .java .class
 
-# Command to clean up Python cache files.
+# Here, redefine the suffixes as .java and .class
+# This allows us to use make's implicit rules for Java compilation
+.java.class:
+    $(JCC) $(JFLAGS) $*.java
+
+# Define a variable for the Java source files
+# This will find all .java files in the controller, model, and view directories
+SOURCES = $(wildcard controller/*.java model/*.java view/*.java)
+
+# Define a variable for the class files
+# This uses the sources list, but replaces the .java extension with .class
+CLASSES = $(SOURCES:.java=.class)
+
+# The default make target entry
+default: classes
+
+# This target entry builds the .class files
+# It depends on the .java files
+classes: $(CLASSES)
+
+# The clean target removes .class files
+# This is a phony target, meaning it's not a file name
 clean:
-	find . -type f -name '*.pyc' -delete
-	find . -type d -name '__pycache__' -exec rm -rf {} +
+    $(RM) controller/*.class model/*.class view/*.class
 
-# You can add more tasks as needed for your project.
+# The run target executes the main class
+# You can add the arguments if required after the class name
+run: classes
+    java main.Main
+
+# Define a phony target to avoid problems with files named clean and run
+.PHONY: default classes clean run
