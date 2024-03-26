@@ -38,6 +38,10 @@ public class CPU {
         return memory.getMemoryContents();
     }
 
+    public int getMemorySize() {
+        return memory.getSize();
+    }
+
     public Map<String, Integer> getStatistics() {
         return controlUnit.getStatistics();
     }
@@ -51,6 +55,12 @@ public class CPU {
     public void setRegister(int index, int value) {
         registerFile.writeRegister(index, value);
     }
+
+    public boolean isStopped() {
+        // may need to add a flag as well like || stopflag
+        return pc >= memory.getSize(); 
+    }
+
 
     // if
     public int fetchInstruction() {

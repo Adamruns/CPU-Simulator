@@ -7,6 +7,10 @@ public class Memory {
         memory = new int[size];
     }
 
+    public int getSize() {
+        return memory.length;
+    }
+
     public int readMemory(int address) {
         return memory[address];
     }

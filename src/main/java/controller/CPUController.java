@@ -13,6 +13,8 @@ public class CPUController {
         this.view = view;
     }
 
+    
+
     // Method to start the CPU simulation
     public void startSimulation() {
         // Perform initialization if necessary
@@ -26,11 +28,19 @@ public class CPUController {
 
     // Method to run the entire program
     private void runProgram() {
-        // Logic to execute the entire program
-        // This could involve fetching instructions from memory, executing them,
-        // updating CPU state, and updating the view
-        // You would typically use a loop to iterate over instructions until the program terminates
+        boolean programRunning = true; 
+        
+        while (programRunning) {
+            int instruction = cpu.fetchInstruction();
+            cpu.decodeInstruction(instruction); 
+            
+            updateView(); 
+            
+            
+            programRunning = !cpu.isStopped();
+        }
     }
+    
 
     // Method to handle step-by-step execution
     private void stepExecution() {
