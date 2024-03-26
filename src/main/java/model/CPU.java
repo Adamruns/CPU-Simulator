@@ -56,6 +56,7 @@ public class CPU {
     public int fetchInstruction() {
         // Fetch the instruction at the current PC value
         int instruction = memory.readInstruction(pc);
+        controlUnit.incrementCycleCount();
     
         // Return the fetched instruction for decoding and execution
         return instruction;
@@ -64,6 +65,7 @@ public class CPU {
     // id
     public void decodeInstruction(int instruction) {
         int opcode = extractOpcode(instruction);
+        controlUnit.trackInstruction("" + opcode);
     
         if (opcode == OPCODE_R_TYPE) {
             int funct = extractFunctField(instruction);
@@ -100,10 +102,10 @@ public class CPU {
         int rs = extractSourceRegister(instruction);
         int rt = extractTargetRegister(instruction);
         int rd = extractDestinationRegister(instruction);
-
         // could replace with a call to an 'add' function in alu?
         int result = getRegister(rs) + getRegister(rt);
         setRegister(rd, result);
+        controlUnit.trackALUOperation("ADD");
         pc += 4; 
     }
     
@@ -114,6 +116,7 @@ public class CPU {
         int address = getRegister(base) + offset;
         int data = memory.readMemory(address);
         setRegister(rt, data);
+        controlUnit.trackALUOperation("LW");
         pc += 4;
     }
     
@@ -123,6 +126,7 @@ public class CPU {
         int immediate = extractImmediate(instruction); 
         int result = getRegister(rs) + immediate;
         setRegister(rt, result);
+        controlUnit.trackALUOperation("ADDI");
         pc += 4;
     }
 
