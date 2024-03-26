@@ -1,4 +1,4 @@
-package main;
+package main.java;
 
 import main.java.model.CPU;
 import main.java.view.CPUTextView;
