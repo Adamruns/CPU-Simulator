@@ -19,6 +19,8 @@ public class CPU {
     public static final int OPCODE_LW = 0x23;
     public static final int OPCODE_SW = 0x2B;
 
+    public static final int FUNCT_ADD = 0x20;
+
     public CPU(int numRegisters, int memorySize) {
         registerFile = new RegisterFile(numRegisters);
         alu = new ALU();
@@ -69,9 +71,6 @@ public class CPU {
                 case FUNCT_ADD:
                     executeAdd(instruction);
                     break;
-                case FUNCT_SUB:
-                    executeSub(instruction);
-                    break;
                 // Add cases for other R-type functions
                 default:
                     // Handle undefined function code
@@ -82,10 +81,10 @@ public class CPU {
             // Handle non-R-type instructions
             switch (opcode) {
                 case OPCODE_BEQ:
-                    executeBEQ(instruction);
+                    //executeBEQ(instruction);
                     break;
                 case OPCODE_J:
-                    executeJump(instruction);
+                    //executeJump(instruction);
                     break;
                 // Add cases for other opcodes
                 default:
@@ -101,6 +100,8 @@ public class CPU {
         int rs = extractSourceRegister(instruction);
         int rt = extractTargetRegister(instruction);
         int rd = extractDestinationRegister(instruction);
+
+        // could replace with a call to an 'add' function in alu?
         int result = getRegister(rs) + getRegister(rt);
         setRegister(rd, result);
         pc += 4; 
