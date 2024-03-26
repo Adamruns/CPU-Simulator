@@ -85,9 +85,6 @@ public class CPU {
                 case OPCODE_BEQ:
                     //executeBEQ(instruction);
                     break;
-                case OPCODE_J:
-                    //executeJump(instruction);
-                    break;
                 // Add cases for other opcodes
                 default:
                     // Handle undefined opcode
@@ -109,7 +106,7 @@ public class CPU {
         pc += 4; 
     }
     
-    private void executeLw(int instruction) {
+    /*private void executeLw(int instruction) {
         int base = extractSourceRegister(instruction);
         int rt = extractTargetRegister(instruction);
         int offset = extractImmediate(instruction); 
@@ -117,6 +114,7 @@ public class CPU {
         int data = memory.readMemory(address);
         setRegister(rt, data);
         controlUnit.trackALUOperation("LW");
+        controlUnit.trackMemoryRead();
         pc += 4;
     }
     
@@ -128,7 +126,7 @@ public class CPU {
         setRegister(rt, result);
         controlUnit.trackALUOperation("ADDI");
         pc += 4;
-    }
+    }*/
 
     // helper methods for extracting fields from instructions
     private int extractOpcode(int instruction) {
